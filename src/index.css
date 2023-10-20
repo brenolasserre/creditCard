@@ -1,0 +1,28 @@
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.contain {
+    max-width: 80%;
+    margin: 0 10%;
+}
+
+html, body {
+    background:#f3f3f3;
+    overflow:hidden;
+    font-family: sans-serif;
+}
+
+.m-0 {
+    margin: 0px !important;
+}
+
+label {
+    margin: 0.4285714286em !important; 
+}
+
+.card p {
+    letter-spacing: 0.075em;
+    text-shadow: -1px -1px 0px rgba(255,255,255,0.5),1px -1px 0px rgba(255,255,255,0.5),1px 1px 0px rgba(0,0,0,0.5),1px -1px 0px rgba(0,0,0,0.5);
+}
