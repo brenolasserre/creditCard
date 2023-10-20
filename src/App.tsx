@@ -24,9 +24,13 @@ function App() {
     isCardFlipped: false,
   });
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
   const [isFading, setIsFading] = useState(false);
-  const handleImageChange = (newImage) => {
+  
+  const backgroundImageStyle = {
+    backgroundImage: `url(${image})`
+  };
+  const handleImageChange = (newImage:string) => {
     setIsFading(true);
     setTimeout(() => {
       setImage(newImage);
