@@ -2,9 +2,18 @@ import { useState } from 'react';
 import visaBackground from '../public/visa-background.webp';
 import americanExpressBackground from '../public/american-background.webp';
 import masterCardBackground from '../public/mastercard-background.webp';
+import unknown from '../public/unknown.webp';
+
 import visaLogo from '../public/visa.png';
 import americanExpressLogo from '../public/american.png';
 import masterCardLogo from '../public/mastercard.png';
+
+import contactless from '../public/contactless.png'
+import chip from '../public/chip.png'
+
+import visaSvg from '../public/visa.svg';
+import americanSvg from '../public/american.svg';
+import mastercardSvg from '../public/mastercard.svg';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -93,17 +102,17 @@ function App() {
   if (cardType === 'visa') {
     backgroundImage = visaBackground;
     cardLogo = visaLogo;
-    cardIcon = '../public/visa.svg';
+    cardIcon = visaSvg;
   } else if (cardType === 'american') {
     backgroundImage = americanExpressBackground;
     cardLogo = americanExpressLogo;
-    cardIcon = '../public/american.svg';
+    cardIcon = americanSvg;
   } else if (cardType === 'mastercard') {
     backgroundImage = masterCardBackground;
     cardLogo = masterCardLogo;
-    cardIcon = '../public/mastercard.svg';
+    cardIcon = mastercardSvg;
   } else if (cardType === 'unknown') {
-    backgroundImage = '../public/unknown.webp';
+    backgroundImage = unknown;
   }
 
   const handleRandomCardGeneration = () => {
@@ -132,11 +141,11 @@ function App() {
       <div className={`w-full h-full absolute top-0 left-0 rounded-3xl bg-cover`} style={{ backgroundImage: `url(${backgroundImage})` }}>
           <div className="card p-12 flex flex-col justify-between h-full">
             <div className='flex items-end justify-between'>
-              <img src="../public/chip.png" alt="Chip" className="h-16 w-22" />
+              <img src={chip} alt="Chip" className="h-16 w-22" />
               
               <div className='flex flex-col items-end gap-4'>  
               <img className="h-10 w-26" src={cardLogo} alt="" />
-                <img className="h-14 w-14" src="../public/contactless.png" alt="" />
+                <img className="h-14 w-14" src={contactless} alt="" />
               </div>
             </div>
             <div className="flex flex-col">
