@@ -70,6 +70,11 @@ function App() {
         regex: '^(5[1-5]\\d{0,2}|22[2-9]\\d{0,1}|2[3-7]\\d{0,2})\\d{0,12}',
         cardtype: 'mastercard',
       },
+      {
+        mask: '0000 0000 0000 0000',
+        regex: '',
+        cardtype: 'unknown'
+      }
     ];
 
     for (const pattern of patterns) {
@@ -77,28 +82,53 @@ function App() {
         return pattern.cardtype;
       }
     }
-    return 'visa';
+    return 'unknown';
   };
 
   const cardType = identifyCardType(formData.cardNumber);
   let backgroundImage;
   let cardLogo;
+  let cardIcon;
   
   if (cardType === 'visa') {
     backgroundImage = visaBackground;
     cardLogo = visaLogo;
+    cardIcon = '../public/visa.svg';
   } else if (cardType === 'american') {
     backgroundImage = americanExpressBackground;
     cardLogo = americanExpressLogo;
+    cardIcon = '../public/american.svg';
   } else if (cardType === 'mastercard') {
     backgroundImage = masterCardBackground;
     cardLogo = masterCardLogo;
+    cardIcon = '../public/mastercard.svg';
+  } else if (cardType === 'unknown') {
+    backgroundImage = '../public/unknown.webp';
   }
 
+  const handleRandomCardGeneration = () => {
+    const prefixes = ['3742', '3782', '5425', '2222', '4917', '4509'];
+    const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    let randomCardNumber = randomPrefix;
+    for (let i = 0; i < 12; i++) {
+      randomCardNumber += Math.floor(Math.random() * 10);
+    }
+    const formattedCardNumber = randomCardNumber.replace(/(\d{4})/g, '$1 ').trim();
+
+    const randomMonth = Math.floor(Math.random() * 12) + 1; 
+    const randomYear = Math.floor(Math.random() * (35 - 22 + 1)) + 22; 
+    const expiration = `${String(randomMonth).padStart(2, '0')}/${randomYear}`;
+    const randomCVC = Math.floor(100 + Math.random() * 900); 
+    const names = ['Jose Lopez', 'Mirtha Valencia', 'Joaquin del Solar', 'Micaela Velazquez Reinoso', 'Cristina Vertolici', 'Cristina Vertolici', 'Juan Bautista Cuban', 'Enrique Certuli'];
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    setFormData({ ...formData, fullName: randomName, cardNumber: formattedCardNumber, expiration: expiration, cvc: String(randomCVC) });
+  };
+  
+
   return (
-    <div className="flex justify-center gap-4 items-center contain">
     
-      <div className="relative shadow-2xl shadow-[#16192E] z-30 bg-transparent stroke-1 scale-75 border-gray-200 w-[650px] mx-auto h-[420px] rounded-3xl">
+    <div className="contenedor flex justify-center gap-4 items-center contain">
+      <div className="tarjeta relative shadow-2xl shadow-[#16192E] z-30 bg-transparent stroke-1 scale-75 border-gray-200 w-[650px] mx-auto h-[420px] rounded-3xl">
       <div className={`w-full h-full absolute top-0 left-0 rounded-3xl bg-cover`} style={{ backgroundImage: `url(${backgroundImage})` }}>
           <div className="card p-12 flex flex-col justify-between h-full">
             <div className='flex items-end justify-between'>
@@ -120,7 +150,7 @@ function App() {
                   );
                 })}
             </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between nombres">
                 <p className="text-2xl text-white font-mono">
                   {formData.fullName.length > 0
                     ? formData.fullName.toUpperCase()
@@ -139,7 +169,6 @@ function App() {
                 {formData.cvc ? formData.cvc.slice(0, 3).padEnd(3, '•') : '•••'}
               </p>
           </div>
-
           </div>
         </div>
       </div>
@@ -147,16 +176,22 @@ function App() {
       <div className="flex flex-col space-y-2 w-2/5">
         <label htmlFor="cardNumber" className='text-xs text-gray-500'>Número de tarjeta</label>
         <input
-          id='cardNumber'
-          placeholder="1234 1234 1234 1234"
-          autoComplete="new-password"
-          type="text"
-          name="cardNumber"
-          onChange={handleInputChange}
-          className="m-0 bg-slate-100 rounded-md border py-2 px-4 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none sm:text-sm"
-          maxLength={19}
-          value={formData.cardNumber}
-        />
+            id='cardNumber'
+            placeholder="1234 1234 1234 1234"
+            autoComplete="new-password"
+            type="text"
+            name="cardNumber"
+            onChange={handleInputChange}
+            className="m-0 bg-slate-100 rounded-md border py-2 px-4 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none sm:text-sm pr-10"
+            style={{
+              backgroundImage: `url(${cardIcon})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: '98% center',
+              backgroundSize: '8%',
+            }}
+            maxLength={19}
+            value={formData.cardNumber}
+          />
         <label htmlFor="fullName" className='text-xs text-gray-500'>Nombre del titular</label>
         <input
           id='fullName'
@@ -205,6 +240,12 @@ function App() {
           className="rounded-md bg-indigo-600 border py-2 px-4 text-white placeholder-gray-400 focus:ring-2 hover:bg-indigo-900 cursor-pointer outline-none sm:text-sm transition ease-in-out duration-150"
           value="Pagar"
         />
+        <button
+          onClick={handleRandomCardGeneration}
+          className="random rounded-md py-2 px-4 text-indigo-600 placeholder-gray-400 focus:ring-2 hover:bg-indigo-600 hover:text-white cursor-pointer outline-none sm:text-sm transition ease-in-out duration-150"
+        >
+          Generar Informacion Random
+        </button>
       </div>
     </div>
   );
