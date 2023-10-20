@@ -24,6 +24,16 @@ function App() {
     isCardFlipped: false,
   });
 
+  const [image, setImage] = useState(null);
+  const [isFading, setIsFading] = useState(false);
+  const handleImageChange = (newImage) => {
+    setIsFading(true);
+    setTimeout(() => {
+      setImage(newImage);
+      setIsFading(false);
+    }, 500);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === 'fullName') {
       const input = e.target.value
@@ -116,7 +126,7 @@ function App() {
   }
 
   const handleRandomCardGeneration = () => {
-    const prefixes = ['3742', '3782', '5425', '2222', '4917', '4509'];
+    const prefixes = ['3742', '3782', '5425', '5251', '4917', '4509'];
     const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
     let randomCardNumber = randomPrefix;
     for (let i = 0; i < 12; i++) {
@@ -138,12 +148,12 @@ function App() {
     
     <div className="contenedor flex justify-center gap-4 items-center contain">
       <div className="tarjeta relative shadow-2xl shadow-[#16192E] z-30 bg-transparent stroke-1 scale-75 border-gray-200 w-[650px] mx-auto h-[420px] rounded-3xl">
-      <div className={`w-full h-full absolute top-0 left-0 rounded-3xl bg-cover`} style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className={`w-full h-full absolute top-0 left-0 rounded-3xl bg-cover card-container ${isFading ? 'fade' : ''}`} style={{ backgroundImage: `url(${backgroundImage})` }}>
           <div className="card p-12 flex flex-col justify-between h-full">
             <div className='flex items-end justify-between'>
               <img src={chip} alt="Chip" className="h-16 w-22" />
               
-              <div className='flex flex-col items-end gap-4'>  
+              <div className={`flex flex-col items-end gap-4 ${isFading ? 'fade' : ''}`}>  
               <img className="h-10 w-26" src={cardLogo} alt="" />
                 <img className="h-14 w-14" src={contactless} alt="" />
               </div>
