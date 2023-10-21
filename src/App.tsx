@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import visaBackground from '../public/visa-background.webp';
 import americanExpressBackground from '../public/american-background.webp';
 import masterCardBackground from '../public/mastercard-background.webp';
@@ -8,8 +8,8 @@ import visaLogo from '../public/visa.png';
 import americanExpressLogo from '../public/american.png';
 import masterCardLogo from '../public/mastercard.png';
 
-import contactless from '../public/contactless.png'
-import chip from '../public/chip.png'
+import contactless from '../public/contactless.png';
+import chip from '../public/chip.png';
 
 import visaSvg from '../public/visa.svg';
 import americanSvg from '../public/american.svg';
@@ -24,18 +24,9 @@ function App() {
     isCardFlipped: false,
   });
 
-  const [image, setImage] = useState<string | null>(null);
-  const [isFading, setIsFading] = useState(false);
-  
-  const backgroundImageStyle = {
-    backgroundImage: `url(${image})`
-  };
-  const handleImageChange = (newImage:string) => {
-    setIsFading(true);
-    setTimeout(() => {
-      setImage(newImage);
-      setIsFading(false);
-    }, 500);
+  let backgroundImageStyle = {
+    backgroundImage: '',
+    transition: 'background-image 0.5s', // Add the transition property directly here
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +72,7 @@ function App() {
       {
         mask: '0000 0000 0000 0000',
         regex: '^4\\d{0,15}',
-        cardtype: 'visa'
+        cardtype: 'visa',
       },
       {
         mask: '0000 0000 0000 0000',
@@ -96,8 +87,8 @@ function App() {
       {
         mask: '0000 0000 0000 0000',
         regex: '',
-        cardtype: 'unknown'
-      }
+        cardtype: 'unknown',
+      },
     ];
 
     for (const pattern of patterns) {
@@ -112,21 +103,37 @@ function App() {
   let backgroundImage;
   let cardLogo;
   let cardIcon;
-  
+
   if (cardType === 'visa') {
     backgroundImage = visaBackground;
     cardLogo = visaLogo;
     cardIcon = visaSvg;
+    backgroundImageStyle = {
+      ...backgroundImageStyle,
+      backgroundImage: `url(${visaBackground})`,
+    };
   } else if (cardType === 'american') {
     backgroundImage = americanExpressBackground;
     cardLogo = americanExpressLogo;
     cardIcon = americanSvg;
+    backgroundImageStyle = {
+      ...backgroundImageStyle,
+      backgroundImage: `url(${americanExpressBackground})`,
+    };
   } else if (cardType === 'mastercard') {
     backgroundImage = masterCardBackground;
     cardLogo = masterCardLogo;
     cardIcon = mastercardSvg;
+    backgroundImageStyle = {
+      ...backgroundImageStyle,
+      backgroundImage: `url(${masterCardBackground})`,
+    };
   } else if (cardType === 'unknown') {
     backgroundImage = unknown;
+    backgroundImageStyle = {
+      ...backgroundImageStyle,
+      backgroundImage: `url(${unknown})`,
+    };
   }
 
   const handleRandomCardGeneration = () => {
@@ -138,27 +145,25 @@ function App() {
     }
     const formattedCardNumber = randomCardNumber.replace(/(\d{4})/g, '$1 ').trim();
 
-    const randomMonth = Math.floor(Math.random() * 12) + 1; 
-    const randomYear = Math.floor(Math.random() * (35 - 22 + 1)) + 22; 
+    const randomMonth = Math.floor(Math.random() * 12) + 1;
+    const randomYear = Math.floor(Math.random() * (35 - 22 + 1)) + 22;
     const expiration = `${String(randomMonth).padStart(2, '0')}/${randomYear}`;
-    const randomCVC = Math.floor(100 + Math.random() * 900); 
+    const randomCVC = Math.floor(100 + Math.random() * 900);
     const names = ['Jose Lopez', 'Mirtha Valencia', 'Joaquin del Solar', 'Micaela Velazquez Reinoso', 'Cristina Vertolici', 'Cristina Vertolici', 'Juan Bautista Cuban', 'Enrique Certuli'];
     const randomName = names[Math.floor(Math.random() * names.length)];
     setFormData({ ...formData, fullName: randomName, cardNumber: formattedCardNumber, expiration: expiration, cvc: String(randomCVC) });
   };
-  
 
   return (
-    
     <div className="contenedor flex justify-center gap-4 items-center contain">
-      <div className="tarjeta relative shadow-2xl shadow-[#16192E] z-30 bg-transparent stroke-1 scale-75 border-gray-200 w-[650px] mx-auto h-[420px] rounded-3xl">
-      <div className={`w-full h-full absolute top-0 left-0 rounded-3xl bg-cover card-container ${isFading ? 'fade' : ''}`} style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="tarjeta relative shadow-2xl shadow-[#16192E] z-30 bg-transparent stroke-1 scale-75 border-gray-200 w-[650px] mx-auto h-[420px] rounded-3xl" style={backgroundImageStyle}>
+        <div className="w-full h-full absolute top-0 left-0 rounded-3xl bg-cover card-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <div className="card p-12 flex flex-col justify-between h-full">
-            <div className='flex items-end justify-between'>
+            <div className="flex items-end justify-between">
               <img src={chip} alt="Chip" className="h-16 w-22" />
-              
-              <div className={`flex flex-col items-end gap-4 ${isFading ? 'fade' : ''}`}>  
-              <img className="h-10 w-26" src={cardLogo} alt="" />
+
+              <div className="flex flex-col items-end gap-4">
+                <img className="h-10 w-26" src={cardLogo} alt="" />
                 <img className="h-14 w-14" src={contactless} alt="" />
               </div>
             </div>
@@ -172,7 +177,7 @@ function App() {
                     </p>
                   );
                 })}
-            </div>
+              </div>
               <div className="flex justify-between nombres">
                 <p className="text-2xl text-white font-mono">
                   {formData.fullName.length > 0
@@ -191,7 +196,7 @@ function App() {
               <p className="text-white text-2xl font-mono">
                 {formData.cvc ? formData.cvc.slice(0, 3).padEnd(3, '•') : '•••'}
               </p>
-          </div>
+            </div>
           </div>
         </div>
       </div>
@@ -199,22 +204,22 @@ function App() {
       <div className="flex flex-col space-y-2 w-2/5">
         <label htmlFor="cardNumber" className='text-xs text-gray-500'>Número de tarjeta</label>
         <input
-            id='cardNumber'
-            placeholder="1234 1234 1234 1234"
-            autoComplete="new-password"
-            type="text"
-            name="cardNumber"
-            onChange={handleInputChange}
-            className="m-0 bg-slate-100 rounded-md border py-2 px-4 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none sm:text-sm pr-10"
-            style={{
-              backgroundImage: `url(${cardIcon})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: '98% center',
-              backgroundSize: '8%',
-            }}
-            maxLength={19}
-            value={formData.cardNumber}
-          />
+          id='cardNumber'
+          placeholder="1234 1234 1234 1234"
+          autoComplete="new-password"
+          type="text"
+          name="cardNumber"
+          onChange={handleInputChange}
+          className="m-0 bg-slate-100 rounded-md border py-2 px-4 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none sm:text-sm pr-10"
+          style={{
+            backgroundImage: `url(${cardIcon})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: '98% center',
+            backgroundSize: '8%',
+          }}
+          maxLength={19}
+          value={formData.cardNumber}
+        />
         <label htmlFor="fullName" className='text-xs text-gray-500'>Nombre del titular</label>
         <input
           id='fullName'
