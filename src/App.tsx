@@ -206,9 +206,9 @@ function App() {
         <input
           id='cardNumber'
           placeholder="1234 1234 1234 1234"
-          autoComplete="new-password"
           type="text"
           name="cardNumber"
+          autoComplete="false"
           onChange={handleInputChange}
           className="m-0 bg-slate-100 rounded-md border py-2 px-4 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none sm:text-sm pr-10"
           style={{
