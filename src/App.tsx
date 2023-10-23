@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import visaBackground from '../public/visa-background.webp';
-import americanExpressBackground from '../public/american-background.webp';
-import masterCardBackground from '../public/mastercard-background.webp';
-import unknown from '../public/unknown.webp';
+import visaBackground from '/visa-background.webp';
+import americanExpressBackground from '/american-background.webp';
+import masterCardBackground from '/mastercard-background.webp';
+import unknown from '/unknown.webp';
 
-import visaLogo from '../public/visa.png';
-import americanExpressLogo from '../public/american.png';
-import masterCardLogo from '../public/mastercard.png';
+import visaLogo from '/visa.png';
+import americanExpressLogo from '/american.png';
+import masterCardLogo from '/mastercard.png';
 
-import contactless from '../public/contactless.png';
-import chip from '../public/chip.png';
+import contactless from '/contactless.png';
+import chip from '/chip.png';
 
-import visaSvg from '../public/visa.svg';
-import americanSvg from '../public/american.svg';
-import mastercardSvg from '../public/mastercard.svg';
+import visaSvg from '/visa.svg';
+import americanSvg from '/american.svg';
+import mastercardSvg from '/mastercard.svg';
 
 function App() {
   const [formData, setFormData] = useState({
